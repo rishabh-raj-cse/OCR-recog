@@ -6,8 +6,9 @@ var cors = require("cors");
 const FormData = require("form-data");
 const multer = require("multer");
 const { ocrSpace } = require("ocr-space-api-wrapper");
-const Tesseract = require("tesseract.js")
+const tesseract = require("node-tesseract-ocr")
 //
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -34,26 +35,55 @@ app.post("/", upload.array("file"), async (req, res) => {
   let index = 0;
 
   const result = [];
+  const images = [];
   for (const file of files) {
     const { filename } = file;
-    await Tesseract.recognize(
-      `./uploads/${filename}`,
-      'eng',
-      { logger: m => console.log(m) }
-    ).then(({ data: { text } }) => {
+    images.push(`./uploads/${filename}`);
 
-      const findText = (text, str) => {
-        return str.indexOf(text) > -1;
-      }
-      console.log({ id: id[index] })
-      console.log(findText(id[index], text))
-      result.push(findText(id[index], text))
-    })
-    console.log({ id: id[index] })
-    index++;
+    // await Tesseract.recognize(
+    //   `./uploads/${filename}`,
+    //   'eng',
+    //   { logger: m => console.log(m) }
+    // ).then(({ data: { text } }) => {
+
+    //   const findText = (text, str) => {
+    //     return str.indexOf(text) > -1;
+    //   }
+    //   console.log({ id: id[index] })
+    //   console.log(findText(id[index], text))
+    //   result.push(findText(id[index], text))
+    // })
+    // console.log({ id: id[index] })
+    // index++;
   }
+  const config = {
+    lang: "eng",
+    oem: 1,
+    psm: 6,
+  }
+  const findText = (text, str) => {
+    return str.indexOf(text) > -1;
+  }
+  const allText = [];
 
-  res.json(result);
+  await tesseract
+    .recognize(images, config)
+    .then((text) => {
+
+      allText.push(text)
+      for (var i = 0; i < id.length; i++) {
+        result.push(findText(id[i], text));
+      }
+
+      console.log("Result:", text);
+    })
+    .catch((error) => {
+      console.log(error.message)
+    })
+  console.log(id)
+  res.json({ result, allText });
+
+  //check kro
 
 
 
