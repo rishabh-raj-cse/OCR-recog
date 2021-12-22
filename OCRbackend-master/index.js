@@ -31,6 +31,17 @@ app.post("/", upload.array("file"), async (req, res) => {
   const id = req.body.id;
   const files = req.files;
 
+  //validation for id
+  if (id[0].length !== 15) {
+    res.send({ message: "Abu Dhabi must be 15 characters long", success: false });
+  }
+  if (id[1].length !== 6) {
+    res.send("Sharjah License number should be 6 digits long");
+  }
+  if (id[2].length !== 4) { res.send("Umm Al Quwain License number should be 4 digits long"); }
+  if (id[3].length !== 6) { res.send("Dubai License number should be 6 digits long"); }
+  if (id[4].length !== 5) { res.send("Ajman License number should be 5 digits long"); }
+  if (id[5].length !== 5) { res.send("Ras Al Khaimah License number should be 5 digits long"); }
 
   let index = 0;
 
@@ -80,7 +91,7 @@ app.post("/", upload.array("file"), async (req, res) => {
     .catch((error) => {
       console.log(error.message)
     })
-  console.log(id)
+
   res.json({ result, allText });
 
   //check kro

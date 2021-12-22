@@ -61,7 +61,7 @@ function Upload() {
     }
     // data.append("id", JSON.stringify([id, id2, id3]));
     await axios
-      .post("http://localhost:3000", data)
+      .post("http://localhost:3005", data)
       .then((res) => {
         setLoading(false);
         // setMessage(
