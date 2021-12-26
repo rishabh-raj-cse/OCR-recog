@@ -23,7 +23,7 @@ const upload = multer({ storage: storage });
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+
 app.use(cors());
 //routes
 app.post("/", upload.array("file"), async (req, res) => {

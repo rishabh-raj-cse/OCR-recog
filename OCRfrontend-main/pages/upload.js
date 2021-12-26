@@ -45,14 +45,8 @@ function Upload() {
     data.append("file", file4);
     data.append("file", file5);
     data.append("file", file6);
-    // data.append("file", file7);
-    // data.append("file", file8);
-    // data.append("file", file9);
-    data.append("name", name);
-    // data.append("id1", id);
-    // data.append("id2", id2);
-    // data.append("id3", id3);
 
+    data.append("name", name);
     for (var i = 0; i < ids.length; i++) {
       if (ids[i] !== null) {
         data.append("id[]", ids[i]);
@@ -61,7 +55,7 @@ function Upload() {
     }
     // data.append("id", JSON.stringify([id, id2, id3]));
     await axios
-      .post("http://localhost:3005", data)
+      .post("http://40.119.162.157:3005/", data)
       .then((res) => {
         setLoading(false);
         // setMessage(
