@@ -32,16 +32,40 @@ app.post("/", upload.array("file"), async (req, res) => {
   const files = req.files;
 
   //validation for id
-  if (id[0].length !== 15) {
-    res.send({ message: "Abu Dhabi must be 15 characters long", success: false });
+  const validationVariables = [15, 6, 4, 6, 5, 5];
+  const validationString = ["Abu Dhabi must be 15 characters long", "Sharjah License number should be 6 digits long", "Umm Al Quwain License number should be 4 digits long", "Dubai License number should be 6 digits long", "Ajman License number should be 5 digits long", "Ras Al Khaimah License number should be 5 digits long"];
+  const errors = [];
+
+
+  for (var i = 0; i < id.length; i++) {
+    if (id[i] !== validationVariables[i]) {
+
+      errors.push(validationString[i]);
+
+
+
+
+
+
+
+
+    }
   }
-  if (id[1].length !== 6) {
-    res.send("Sharjah License number should be 6 digits long");
+  if (errors.length > 0) {
+    res.json({//if errors are found
+      errors: errors, success: false
+    });
   }
-  if (id[2].length !== 4) { res.send("Umm Al Quwain License number should be 4 digits long"); }
-  if (id[3].length !== 6) { res.send("Dubai License number should be 6 digits long"); }
-  if (id[4].length !== 5) { res.send("Ajman License number should be 5 digits long"); }
-  if (id[5].length !== 5) { res.send("Ras Al Khaimah License number should be 5 digits long"); }
+  //  if (id[0].length !== 15) {
+  //     res.send({ message: "Abu Dhabi must be 15 characters long", success: false });
+  //   }
+  //   if (id[1].length !== 6) {
+  //     res.send("Sharjah License number should be 6 digits long");
+  //   }
+  //   if (id[2].length !== 4) { res.send("Umm Al Quwain License number should be 4 digits long"); }
+  //   if (id[3].length !== 6) { res.send("Dubai License number should be 6 digits long"); }
+  //   if (id[4].length !== 5) { res.send("Ajman License number should be 5 digits long"); }
+  //   if (id[5].length !== 5) { res.send("Ras Al Khaimah License number should be 5 digits long"); }
 
   let index = 0;
 
@@ -51,21 +75,6 @@ app.post("/", upload.array("file"), async (req, res) => {
     const { filename } = file;
     images.push(`./uploads/${filename}`);
 
-    // await Tesseract.recognize(
-    //   `./uploads/${filename}`,
-    //   'eng',
-    //   { logger: m => console.log(m) }
-    // ).then(({ data: { text } }) => {
-
-    //   const findText = (text, str) => {
-    //     return str.indexOf(text) > -1;
-    //   }
-    //   console.log({ id: id[index] })
-    //   console.log(findText(id[index], text))
-    //   result.push(findText(id[index], text))
-    // })
-    // console.log({ id: id[index] })
-    // index++;
   }
   const config = {
     lang: "eng",
@@ -99,51 +108,8 @@ app.post("/", upload.array("file"), async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-  // find id in string
-  // const id = text.match(/\d+/g);
-  // console.log(id)
-
-
-
-
-
-
-
-
-  // const imgToText = await ocrSpace(`./uploads/${fileName}`, {
-  //   apiKey: "3e89393eaf88957",
-  //   isOverlayRequired: true,
-  // });
-
-  // const text = imgToText.ParsedResults[0].ParsedText;
-  // const textArray = text.split("\n");
-  // console.log(textArray);
-
-  // //regex to remove \r
-
-  // const regex = /\r/g;
-  // const newTextArray = textArray.map((item) => item.replace(regex, ""));
-  // console.log(newTextArray);
-
-  //check if item in array
-  // const idIndex = newTextArray.find((item) => item === id);
-
-  // if (idIndex) {
-  //   res.send("true");
-  // } else {
-  //   res.send("false");
-  // }
 });
-app.post("/upload", upload.single("file"), (req, res) => {
-  return res.send("File uploaded successfully");
-});
+
 
 // listen for requests
 app.listen(port, () => {
